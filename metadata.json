@@ -1,0 +1,6 @@
+{
+  "name": "Consulta Pública",
+  "description": "Consulta integrada de dados públicos brasileiros via APIs oficiais (BrasilAPI, IBGE), Google Search e inteligência Gemini, com login Google e histórico na nuvem.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

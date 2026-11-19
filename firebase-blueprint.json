@@ -1,0 +1,140 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Perfil autenticado via conta Google para histórico e auditoria de consultas públicas.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID do usuário."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Nome de exibição da conta Google."
+        },
+        "email": {
+          "type": "string",
+          "description": "E-mail verificado da conta Google."
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "URL opcional da foto de perfil."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp de criação via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp de atualização via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": ["userId", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "ConsultaRecord": {
+      "title": "ConsultaRecord",
+      "description": "Registro de consulta pública brasileira realizada pelo usuário autenticado.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID do proprietário."
+        },
+        "searchMode": {
+          "type": "string",
+          "enum": ["NAME", "CPF", "COMBINED"],
+          "description": "Modo de busca selecionado."
+        },
+        "queryName": {
+          "type": "string",
+          "description": "Nome completo consultado."
+        },
+        "queryCpf": {
+          "type": "string",
+          "description": "CPF consultado (formatado ou mascarado)."
+        },
+        "queryPhone": {
+          "type": "string",
+          "description": "Telefone com DDD consultado."
+        },
+        "cpfValid": {
+          "type": "boolean",
+          "description": "Resultado da validação matemática dos dígitos verificadores do CPF."
+        },
+        "cpfRegion": {
+          "type": "string",
+          "description": "Região fiscal de emissão derivada do 9º dígito do CPF."
+        },
+        "dddRegion": {
+          "type": "string",
+          "description": "Estado e municípios retornados pela BrasilAPI para o DDD."
+        },
+        "ibgeFrequency": {
+          "type": "integer",
+          "description": "Frequência censitária do primeiro nome segundo o IBGE."
+        },
+        "summary": {
+          "type": "string",
+          "description": "Resumo estruturado gerado pelo Gemini com Google Search Grounding."
+        },
+        "thinkingAnalysis": {
+          "type": "string",
+          "description": "Análise aprofundada com ThinkingLevel.HIGH (gemini-4-carbon)."
+        },
+        "dossier": {
+          "type": "object",
+          "description": "Mapa tipado com os 19 campos do dossiê público."
+        },
+        "sourceEntries": {
+          "type": "string",
+          "description": "Lista limitada de fontes verificadas (Título | URL)."
+        },
+        "pinned": {
+          "type": "boolean",
+          "description": "Indica se a consulta está fixada nos favoritos do usuário."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp de criação via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp de atualização via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "searchMode",
+        "queryName",
+        "queryCpf",
+        "queryPhone",
+        "cpfValid",
+        "cpfRegion",
+        "dddRegion",
+        "ibgeFrequency",
+        "summary",
+        "thinkingAnalysis",
+        "dossier",
+        "sourceEntries",
+        "pinned",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Perfil privado do usuário autenticado via Google."
+    },
+    "/users/{userId}/consultas/{consultaId}": {
+      "schema": { "$ref": "#/entities/ConsultaRecord" },
+      "description": "Histórico privado de consultas públicas do usuário."
+    }
+  }
+}
